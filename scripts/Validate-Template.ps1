@@ -32,3 +32,23 @@ if ($RequirePersonalized -and (($manifest | ConvertTo-Json) + $kvp) -match 'DEIN
     throw 'Run scripts/Prepare-Repository.ps1 with your GitHub username first.'
 }
 Write-Host 'PASS: JSON, KVP, includes, IDs, defaults and update checks. AMP runtime not tested.'
+
+$meta = Get-Content -Raw (Join-Path $root $keys['Meta.MetaConfigManifest']) | ConvertFrom-Json
+if ($meta.Count -ne 1 -or $meta[0].ConfigFile -ne '{{$FullBaseDir}}UnrankedServer/zone/amp_zombies.cfg') { throw 'Wrong managed configuration target' }
+$rendered = @()
+foreach ($entry in $meta[0].Subsections[0].SettingMappings.PSObject.Properties) {
+    if (!$defaults.PSObject.Properties[$entry.Name]) { throw "Missing mapped setting: $($entry.Name)" }
+    $rendered += $meta[0].ConfigFormat -f $entry.Value, $defaults.($entry.Name)
+}
+if (($rendered | Where-Object { $_ -like 'exec *' }).Count -ne 3) { throw 'Missing base rule includes' }
+if (($rendered | Where-Object { $_ -like 'set *' }).Count -ne 19) { throw 'Missing Zombies dvars' }
+if ($rendered -notcontains 'set g_password ""') { throw 'Empty password must remain writable' }
+if ($rendered -notcontains 'set sv_maprotation "gametype zclassic map zm_tomb"') { throw 'Wrong default rotation' }
+$rotation = $settings | Where-Object FieldName -eq 'ZmRotation'
+foreach ($choice in $rotation.EnumValues.PSObject.Properties) {
+    if ($choice.Name -notmatch '^gametype zclassic(?: map zm_[a-z]+)+$') { throw "Invalid rotation: $($choice.Name)" }
+}
+foreach ($setting in $settings) {
+    if ($setting.InputType -eq 'enum' -and !$setting.EnumValues.PSObject.Properties[$setting.DefaultValue]) { throw "Invalid enum default: $($setting.FieldName)" }
+}
+Write-Host 'PASS: Zombies mapping covers 19 dvars, 3 rule includes, passwords and map presets.'

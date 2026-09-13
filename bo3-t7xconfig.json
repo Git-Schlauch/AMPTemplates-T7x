@@ -2,15 +2,16 @@
   {
     "DisplayName": "Server Mode",
     "Category": "T7x Server",
-    "Description": "Select which T7x configuration file should be loaded.",
+    "Description": "AMP-Zombies nutzt die Einstellungen der Zombies-Kategorien. Die anderen Modi nutzen weiterhin ihre bisherigen CFG-Dateien. Neustart erforderlich.",
     "FieldName": "ServerConfig",
     "InputType": "enum",
     "ParamFieldName": "ServerConfig",
-    "DefaultValue": "server.cfg",
+    "DefaultValue": "amp_zombies.cfg",
     "EnumValues": {
       "server.cfg": "Multiplayer",
       "server_zm.cfg": "Zombies",
-      "server_cp.cfg": "Campaign / Coop"
+      "server_cp.cfg": "Campaign / Coop",
+      "amp_zombies.cfg": "Zombies - AMP-Einstellungen"
     }
   },
   {
@@ -23,5 +24,283 @@
     "DefaultValue": "",
     "Placeholder": "",
     "EnumValues": {}
+  },
+  {
+    "DisplayName": "Basis-Spielregeln",
+    "Category": "Zombies - Experten",
+    "Description": "Standardpfad normalerweise beibehalten. Wirkt nur im Modus Zombies - AMP-Einstellungen; danach Spielserver neu starten.",
+    "FieldName": "ZmDefaultRules",
+    "InputType": "text",
+    "ParamFieldName": "exec",
+    "DefaultValue": "gamedata/gamesettings/zm/gamesettings_default.cfg",
+    "IncludeInCommandLine": false
+  },
+  {
+    "DisplayName": "Online-Basiskonfiguration",
+    "Category": "Zombies - Experten",
+    "Description": "Standardpfad normalerweise beibehalten. Wirkt nur im Modus Zombies - AMP-Einstellungen; danach Spielserver neu starten.",
+    "FieldName": "ZmOnlineRules",
+    "InputType": "text",
+    "ParamFieldName": "exec",
+    "DefaultValue": "gamedata/configs/common/default_xboxlive.cfg",
+    "IncludeInCommandLine": false
+  },
+  {
+    "DisplayName": "Zclassic-Spielregeln",
+    "Category": "Zombies - Experten",
+    "Description": "Standardpfad normalerweise beibehalten. Wirkt nur im Modus Zombies - AMP-Einstellungen; danach Spielserver neu starten.",
+    "FieldName": "ZmClassicRules",
+    "InputType": "text",
+    "ParamFieldName": "exec",
+    "DefaultValue": "gamedata/gamesettings/zm/gamesettings_zclassic.cfg",
+    "IncludeInCommandLine": false
+  },
+  {
+    "DisplayName": "Servername",
+    "Category": "Zombies - Allgemein",
+    "Description": "Farbcodes wie ^2 sind erlaubt. Keine Anfuehrungszeichen oder Zeilenumbrueche verwenden. Wirkt nur im Modus Zombies - AMP-Einstellungen; danach Spielserver neu starten.",
+    "FieldName": "ZmServerName",
+    "InputType": "text",
+    "ParamFieldName": "set live_steam_server_name",
+    "DefaultValue": "BO3 Zombies Server",
+    "IncludeInCommandLine": false
+  },
+  {
+    "DisplayName": "Beschreibung",
+    "Category": "Zombies - Allgemein",
+    "Description": "Wirkt nur im Modus Zombies - AMP-Einstellungen; danach Spielserver neu starten.",
+    "FieldName": "ZmDescription",
+    "InputType": "text",
+    "ParamFieldName": "set live_steam_server_description",
+    "DefaultValue": "Zombies auf AMP",
+    "IncludeInCommandLine": false
+  },
+  {
+    "DisplayName": "Maximale Spieler",
+    "Category": "Zombies - Allgemein",
+    "Description": "Standardkarten sind fuer vier Spieler ausgelegt. Hoehere Werte koennen Mods erfordern. Wirkt nur im Modus Zombies - AMP-Einstellungen; danach Spielserver neu starten.",
+    "FieldName": "ZmMaxPlayers",
+    "InputType": "number",
+    "ParamFieldName": "set com_maxclients",
+    "DefaultValue": "4",
+    "IncludeInCommandLine": false,
+    "minValue": "1",
+    "maxValue": "18"
+  },
+  {
+    "DisplayName": "Mindestspieler zum Start",
+    "Category": "Zombies - Allgemein",
+    "Description": "Nicht hoeher als maximale Spieler einstellen. Wirkt nur im Modus Zombies - AMP-Einstellungen; danach Spielserver neu starten.",
+    "FieldName": "ZmMinPlayers",
+    "InputType": "number",
+    "ParamFieldName": "set lobby_min_players",
+    "DefaultValue": "1",
+    "IncludeInCommandLine": false,
+    "minValue": "1",
+    "maxValue": "18"
+  },
+  {
+    "DisplayName": "Join-Passwort",
+    "Category": "Zombies - Allgemein",
+    "Description": "Leer bedeutet kein Join-Passwort. Wird in der Server-CFG im Klartext gespeichert. Wirkt nur im Modus Zombies - AMP-Einstellungen; danach Spielserver neu starten.",
+    "FieldName": "ZmJoinPassword",
+    "InputType": "password",
+    "ParamFieldName": "set g_password",
+    "DefaultValue": "",
+    "IncludeInCommandLine": false
+  },
+  {
+    "DisplayName": "RCON-Passwort",
+    "Category": "Zombies - Experten",
+    "Description": "Leer deaktiviert RCON-Zugriff. Wird in der Server-CFG im Klartext gespeichert. Wirkt nur im Modus Zombies - AMP-Einstellungen; danach Spielserver neu starten.",
+    "FieldName": "ZmRconPassword",
+    "InputType": "password",
+    "ParamFieldName": "set rcon_password",
+    "DefaultValue": "",
+    "IncludeInCommandLine": false
+  },
+  {
+    "DisplayName": "Private Spielerplaetze",
+    "Category": "Zombies - Experten",
+    "Description": "Wirkt nur im Modus Zombies - AMP-Einstellungen; danach Spielserver neu starten.",
+    "FieldName": "ZmPrivateSlots",
+    "InputType": "number",
+    "ParamFieldName": "set sv_privateClients",
+    "DefaultValue": "0",
+    "IncludeInCommandLine": false,
+    "minValue": "0",
+    "maxValue": "18"
+  },
+  {
+    "DisplayName": "Verbindungs-Timeout (Sekunden)",
+    "Category": "Zombies - Netzwerk",
+    "Description": "Wirkt nur im Modus Zombies - AMP-Einstellungen; danach Spielserver neu starten.",
+    "FieldName": "ZmTimeout",
+    "InputType": "number",
+    "ParamFieldName": "set sv_timeout",
+    "DefaultValue": "30",
+    "IncludeInCommandLine": false,
+    "minValue": "1",
+    "maxValue": "600"
+  },
+  {
+    "DisplayName": "Reconnect-Limit",
+    "Category": "Zombies - Netzwerk",
+    "Description": "Wirkt nur im Modus Zombies - AMP-Einstellungen; danach Spielserver neu starten.",
+    "FieldName": "ZmReconnect",
+    "InputType": "number",
+    "ParamFieldName": "set sv_reconnectlimit",
+    "DefaultValue": "3",
+    "IncludeInCommandLine": false,
+    "minValue": "0",
+    "maxValue": "60"
+  },
+  {
+    "DisplayName": "Client-Dateipruefung",
+    "Category": "Zombies - Experten",
+    "Description": "Wirkt nur im Modus Zombies - AMP-Einstellungen; danach Spielserver neu starten.",
+    "FieldName": "ZmPure",
+    "InputType": "checkbox",
+    "ParamFieldName": "set sv_pure",
+    "DefaultValue": "0",
+    "IncludeInCommandLine": false,
+    "EnumValues": {
+      "False": "0",
+      "True": "1"
+    }
+  },
+  {
+    "DisplayName": "Chat-Spamschutz",
+    "Category": "Zombies - Netzwerk",
+    "Description": "Wirkt nur im Modus Zombies - AMP-Einstellungen; danach Spielserver neu starten.",
+    "FieldName": "ZmFloodProtect",
+    "InputType": "checkbox",
+    "ParamFieldName": "set sv_floodProtect",
+    "DefaultValue": "1",
+    "IncludeInCommandLine": false,
+    "EnumValues": {
+      "False": "0",
+      "True": "1"
+    }
+  },
+  {
+    "DisplayName": "Spiel-Logdatei",
+    "Category": "Zombies - Experten",
+    "Description": "Relativer Pfad, z.B. logs/games_zm.log. Wirkt nur im Modus Zombies - AMP-Einstellungen; danach Spielserver neu starten.",
+    "FieldName": "ZmGameLog",
+    "InputType": "text",
+    "ParamFieldName": "set g_log",
+    "DefaultValue": "logs/games_zm.log",
+    "IncludeInCommandLine": false
+  },
+  {
+    "DisplayName": "Lobby-Modus",
+    "Category": "Zombies - Experten",
+    "Description": "Zombies benoetigt zm. Wirkt nur im Modus Zombies - AMP-Einstellungen; danach Spielserver neu starten.",
+    "FieldName": "ZmLobbyMode",
+    "InputType": "enum",
+    "ParamFieldName": "set sv_lobby_mode",
+    "DefaultValue": "zm",
+    "IncludeInCommandLine": false,
+    "EnumValues": {
+      "zm": "Zombies"
+    }
+  },
+  {
+    "DisplayName": "Karte sofort laden",
+    "Category": "Zombies - Karten",
+    "Description": "Aus fuer Playlist-basierte Custom Maps; hiermit wird kein Workshop-Download eingerichtet. Wirkt nur im Modus Zombies - AMP-Einstellungen; danach Spielserver neu starten.",
+    "FieldName": "ZmSkipLobby",
+    "InputType": "checkbox",
+    "ParamFieldName": "set sv_skip_lobby",
+    "DefaultValue": "1",
+    "IncludeInCommandLine": false,
+    "EnumValues": {
+      "False": "0",
+      "True": "1"
+    }
+  },
+  {
+    "DisplayName": "Nur LAN / nicht im oeffentlichen Serverbrowser",
+    "Category": "Zombies - Netzwerk",
+    "Description": "Fuer deinen lokalen Server aktivieren. Ersetzt keine Firewall. Wirkt nur im Modus Zombies - AMP-Einstellungen; danach Spielserver neu starten.",
+    "FieldName": "ZmLanOnly",
+    "InputType": "checkbox",
+    "ParamFieldName": "set sv_lanonly",
+    "DefaultValue": "0",
+    "IncludeInCommandLine": false,
+    "EnumValues": {
+      "False": "0",
+      "True": "1"
+    }
+  },
+  {
+    "DisplayName": "Third-Person-Ansicht",
+    "Category": "Zombies - Spielregeln",
+    "Description": "Wirkt nur im Modus Zombies - AMP-Einstellungen; danach Spielserver neu starten.",
+    "FieldName": "ZmThirdPerson",
+    "InputType": "checkbox",
+    "ParamFieldName": "set cg_thirdPerson",
+    "DefaultValue": "0",
+    "IncludeInCommandLine": false,
+    "EnumValues": {
+      "False": "0",
+      "True": "1"
+    }
+  },
+  {
+    "DisplayName": "Chat verstorbener Spieler",
+    "Category": "Zombies - Spielregeln",
+    "Description": "Wirkt nur im Modus Zombies - AMP-Einstellungen; danach Spielserver neu starten.",
+    "FieldName": "ZmDeadChat",
+    "InputType": "checkbox",
+    "ParamFieldName": "set g_deadChat",
+    "DefaultValue": "0",
+    "IncludeInCommandLine": false,
+    "EnumValues": {
+      "False": "0",
+      "True": "1"
+    }
+  },
+  {
+    "DisplayName": "Erster Gobblegum kostenlos",
+    "Category": "Zombies - Spielregeln",
+    "Description": "Wirkt nur im Modus Zombies - AMP-Einstellungen; danach Spielserver neu starten.",
+    "FieldName": "ZmFreeGum",
+    "InputType": "checkbox",
+    "ParamFieldName": "set scr_firstGumFree",
+    "DefaultValue": "1",
+    "IncludeInCommandLine": false,
+    "EnumValues": {
+      "False": "0",
+      "True": "1"
+    }
+  },
+  {
+    "DisplayName": "Karte / Kartenrotation",
+    "Category": "Zombies - Karten",
+    "Description": "Alle Kartendateien muessen vorhanden sein. Einzelkarte wird wiederholt; Rotation wechselt bei naechster vom Server ausgefuehrter Rotation. Wirkt nur im Modus Zombies - AMP-Einstellungen; danach Spielserver neu starten.",
+    "FieldName": "ZmRotation",
+    "InputType": "enum",
+    "ParamFieldName": "set sv_maprotation",
+    "DefaultValue": "gametype zclassic map zm_tomb",
+    "IncludeInCommandLine": false,
+    "EnumValues": {
+      "gametype zclassic map zm_zod": "Shadows of Evil",
+      "gametype zclassic map zm_factory": "The Giant",
+      "gametype zclassic map zm_castle": "Der Eisendrache",
+      "gametype zclassic map zm_island": "Zetsubou No Shima",
+      "gametype zclassic map zm_stalingrad": "Gorod Krovi",
+      "gametype zclassic map zm_genesis": "Revelations",
+      "gametype zclassic map zm_prototype": "Nacht der Untoten",
+      "gametype zclassic map zm_asylum": "Verrueckt",
+      "gametype zclassic map zm_sumpf": "Shi No Numa",
+      "gametype zclassic map zm_theater": "Kino der Toten",
+      "gametype zclassic map zm_cosmodrome": "Ascension",
+      "gametype zclassic map zm_temple": "Shangri-La",
+      "gametype zclassic map zm_moon": "Moon",
+      "gametype zclassic map zm_tomb": "Origins",
+      "gametype zclassic map zm_zod map zm_factory map zm_castle map zm_island map zm_stalingrad map zm_genesis map zm_prototype map zm_asylum map zm_sumpf map zm_theater map zm_cosmodrome map zm_temple map zm_moon map zm_tomb": "Alle 14 Karten in Reihenfolge"
+    }
   }
 ]

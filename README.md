@@ -4,6 +4,12 @@ Eigenes AMP Generic-Template für einen Black Ops III / T7x Dedicated Server auf
 
 **Status: vorbereitete Erstversion, noch nicht auf einer echten AMP-Instanz getestet.** Die lokalen Prüfungen kontrollieren Dateiformate und interne Verweise, keine AMP-Kompatibilität oder Erreichbarkeit des Servers.
 
+## Zombies-Einstellungen im AMP-Interface (Version 3)
+
+Neuer Modus **Zombies - AMP-Einstellungen** mit Kartenwahl, Servername, Beschreibung, Spielerzahlen, Passwoertern, LAN-Modus, Netzwerk- und Spielregeln. Alle 19 gesetzten Werte und drei Regeldatei-Pfade der bisherigen Zombies-Konfiguration sind enthalten. Die bisherige server_zm.cfg bleibt erhalten; AMP erzeugt eine eigene amp_zombies.cfg. Eigene Werte vor dem Moduswechsel im Interface eintragen. Neustart nach Aenderungen erforderlich.
+
+[Installation in der bestehenden Instanz und Funktionstest](docs/upgrade-v3.md). Nicht erneut die Instanz loeschen. Neue Instanzen waehlen standardmaessig den AMP-Zombies-Modus. Bestehende Instanzen behalten ihren bisherigen Modus.
+
 ## Für GitHub vorbereiten
 
 Im Projektordner PowerShell öffnen und deinen tatsächlichen GitHub-Namen einsetzen:
@@ -32,7 +38,8 @@ Alternativ den bestehenden Projektordner in GitHub Desktop hinzufügen und verö
 | --- | --- |
 | `manifest.json` | Identität des AMP-Repositorys |
 | `bo3-t7x.kvp` | Prozess, Container, Pfade und Startparameter |
-| `bo3-t7xconfig.json` | Auswahl Multiplayer/Zombies/Campaign und Mod-Ordner |
+| `bo3-t7xconfig.json` | Modi, Mod-Ordner und Zombies-Einstellungen |
+| `bo3-t7xmetaconfig.json` | Generator fuer die verwaltete Zombies-Konfiguration |
 | `bo3-t7xports.json` | Port 27017, TCP und UDP reserviert |
 | `bo3-t7xupdates.json` | SteamCMD, Konfigurationen, T7x und Wine-Initialisierung |
 | `scripts/` | Personalisierung und statische Prüfung |
@@ -61,7 +68,7 @@ Vor Updates die Instanz stoppen und eigene Konfigurationen sichern. Vorhandene D
 
 Die Downloads folgen Dss0 `main` und dem aktuellen AlterWare-T7x-Binary. Diese Version ist daher nicht reproduzierbar auf feste Upstream-Versionen eingefroren. Der T7x-Download wird bei Updates ersetzt.
 
-AMP meldet den Prozess mit `ApplicationReadyMode=Immediate` als gestartet; dies beweist noch keine spielbereite Map. Spielerzahlen und Beitrittsmeldungen werden noch nicht automatisch aus Logs erkannt. Ein kompletter Editor für `server.cfg`, Workshop-Downloads und automatische VC++-Runtime-Installation sind nicht enthalten.
+AMP meldet den Prozess mit `ApplicationReadyMode=Immediate` als gestartet; dies beweist noch keine spielbereite Map. Spielerzahlen und Beitrittsmeldungen werden noch nicht automatisch aus Logs erkannt. Der GUI-Editor gilt fuer Zombies; Multiplayer/Campaign bleiben dateibasiert. Workshop-Downloads und automatische VC++-Runtime-Installation sind nicht enthalten.
 
 Zombies und Campaign sind als Konfigurationsauswahl vorhanden, benötigen aber zusätzliche passende Dateien aus deiner eigenen BO3-Installation. Zuerst Multiplayer ohne Mods testen. Details zu zusätzlichen Zombie-Dateien stehen in der unten verlinkten Dss0-Anleitung.
 

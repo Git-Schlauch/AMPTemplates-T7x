@@ -1,0 +1,37 @@
+[
+  {
+    "ConfigFile": "{{$FullBaseDir}}UnrankedServer/zone/amp_zombies.cfg",
+    "ConfigType": "kvp",
+    "ConfigFormat": "{0} \"{1}\"",
+    "AutoMap": false,
+    "Subsections": [
+      {
+        "Heading": "$root",
+        "SettingMappings": {
+          "ZmDefaultRules": "exec",
+          "ZmOnlineRules": "exec",
+          "ZmClassicRules": "exec",
+          "ZmServerName": "set live_steam_server_name",
+          "ZmDescription": "set live_steam_server_description",
+          "ZmMaxPlayers": "set com_maxclients",
+          "ZmMinPlayers": "set lobby_min_players",
+          "ZmJoinPassword": "set g_password",
+          "ZmRconPassword": "set rcon_password",
+          "ZmPrivateSlots": "set sv_privateClients",
+          "ZmTimeout": "set sv_timeout",
+          "ZmReconnect": "set sv_reconnectlimit",
+          "ZmPure": "set sv_pure",
+          "ZmFloodProtect": "set sv_floodProtect",
+          "ZmGameLog": "set g_log",
+          "ZmLobbyMode": "set sv_lobby_mode",
+          "ZmSkipLobby": "set sv_skip_lobby",
+          "ZmLanOnly": "set sv_lanonly",
+          "ZmThirdPerson": "set cg_thirdPerson",
+          "ZmDeadChat": "set g_deadChat",
+          "ZmFreeGum": "set scr_firstGumFree",
+          "ZmRotation": "set sv_maprotation"
+        }
+      }
+    ]
+  }
+]
