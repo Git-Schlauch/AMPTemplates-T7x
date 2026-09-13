@@ -8,28 +8,43 @@
       {
         "Heading": "$root",
         "SettingMappings": {
-          "ZmDefaultRules": "exec",
-          "ZmOnlineRules": "exec",
-          "ZmClassicRules": "exec",
-          "ZmServerName": "set live_steam_server_name",
-          "ZmDescription": "set live_steam_server_description",
-          "ZmMaxPlayers": "set com_maxclients",
-          "ZmMinPlayers": "set lobby_min_players",
-          "ZmJoinPassword": "set g_password",
-          "ZmRconPassword": "set rcon_password",
-          "ZmPrivateSlots": "set sv_privateClients",
-          "ZmTimeout": "set sv_timeout",
-          "ZmReconnect": "set sv_reconnectlimit",
-          "ZmPure": "set sv_pure",
-          "ZmFloodProtect": "set sv_floodProtect",
-          "ZmGameLog": "set g_log",
-          "ZmLobbyMode": "set sv_lobby_mode",
-          "ZmSkipLobby": "set sv_skip_lobby",
-          "ZmLanOnly": "set sv_lanonly",
-          "ZmThirdPerson": "set cg_thirdPerson",
-          "ZmDeadChat": "set g_deadChat",
-          "ZmFreeGum": "set scr_firstGumFree",
-          "ZmRotation": "set sv_maprotation"
+          "exec": "ZmDefaultRules"
+        }
+      },
+      {
+        "Heading": "$root",
+        "SettingMappings": {
+          "exec": "ZmOnlineRules"
+        }
+      },
+      {
+        "Heading": "$root",
+        "SettingMappings": {
+          "exec": "ZmClassicRules"
+        }
+      },
+      {
+        "Heading": "$root",
+        "SettingMappings": {
+          "set live_steam_server_name": "ZmServerName",
+          "set live_steam_server_description": "ZmDescription",
+          "set com_maxclients": "ZmMaxPlayers",
+          "set lobby_min_players": "ZmMinPlayers",
+          "set g_password": "ZmJoinPassword",
+          "set rcon_password": "ZmRconPassword",
+          "set sv_privateClients": "ZmPrivateSlots",
+          "set sv_timeout": "ZmTimeout",
+          "set sv_reconnectlimit": "ZmReconnect",
+          "set sv_pure": "ZmPure",
+          "set sv_floodProtect": "ZmFloodProtect",
+          "set g_log": "ZmGameLog",
+          "set sv_lobby_mode": "ZmLobbyMode",
+          "set sv_skip_lobby": "ZmSkipLobby",
+          "set sv_lanonly": "ZmLanOnly",
+          "set cg_thirdPerson": "ZmThirdPerson",
+          "set g_deadChat": "ZmDeadChat",
+          "set scr_firstGumFree": "ZmFreeGum",
+          "set sv_maprotation": "ZmRotation"
         }
       }
     ]

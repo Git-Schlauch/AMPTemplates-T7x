@@ -36,9 +36,12 @@ Write-Host 'PASS: JSON, KVP, includes, IDs, defaults and update checks. AMP runt
 $meta = Get-Content -Raw (Join-Path $root $keys['Meta.MetaConfigManifest']) | ConvertFrom-Json
 if ($meta.Count -ne 1 -or $meta[0].ConfigFile -ne '{{$FullBaseDir}}UnrankedServer/zone/amp_zombies.cfg') { throw 'Wrong managed configuration target' }
 $rendered = @()
-foreach ($entry in $meta[0].Subsections[0].SettingMappings.PSObject.Properties) {
-    if (!$defaults.PSObject.Properties[$entry.Name]) { throw "Missing mapped setting: $($entry.Name)" }
-    $rendered += $meta[0].ConfigFormat -f $entry.Value, $defaults.($entry.Name)
+foreach ($section in $meta[0].Subsections) {
+  foreach ($entry in $section.SettingMappings.PSObject.Properties) {
+    if ($entry.Name -notmatch '^(exec|set [A-Za-z_]+)$') { throw "Invalid game command: $($entry.Name)" }
+    if (!$defaults.PSObject.Properties[$entry.Value]) { throw "Missing mapped setting: $($entry.Value)" }
+    $rendered += $meta[0].ConfigFormat -f $entry.Name, $defaults.($entry.Value)
+  }
 }
 if (($rendered | Where-Object { $_ -like 'exec *' }).Count -ne 3) { throw 'Missing base rule includes' }
 if (($rendered | Where-Object { $_ -like 'set *' }).Count -ne 19) { throw 'Missing Zombies dvars' }
