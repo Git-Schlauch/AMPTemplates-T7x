@@ -95,6 +95,7 @@ class AdapterTests(unittest.TestCase):
             with patch.object(adapter.urllib.request, 'urlopen', side_effect=[io.BytesIO(json.dumps(manifest).encode()), io.BytesIO(data)]) as fetch:
                 adapter.bootstrap_ezz()
                 self.assertEqual(fetch.call_count, 2)
+                self.assertEqual(fetch.call_args_list[0].args[0].headers['User-agent'], 'Mozilla/5.0 (compatible; AMP-BO3-Adapter/1.0)')
             with patch.object(adapter.urllib.request, 'urlopen') as fetch:
                 adapter.bootstrap_ezz()
                 fetch.assert_not_called()

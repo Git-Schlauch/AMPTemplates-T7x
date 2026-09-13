@@ -35,7 +35,14 @@ def bootstrap_ezz():
     # The AMP wine container runs as amp, matching the path in Ezz's startup error.
     manifest_url = 'https://r2.ezz.lol/boiii.json'
     emit('[AMPBO3] Checking Ezz support data...')
-    with urllib.request.urlopen(manifest_url, timeout=45) as response:
+    request = urllib.request.Request(
+        manifest_url,
+        headers={
+            'User-Agent': 'Mozilla/5.0 (compatible; AMP-BO3-Adapter/1.0)',
+            'Accept': 'application/json,text/plain,*/*',
+        },
+    )
+    with urllib.request.urlopen(request, timeout=45) as response:
         manifest = json.loads(response.read(4 * 1024 * 1024))
     if not isinstance(manifest, list) or not manifest:
         raise ValueError('Ezz returned an empty or invalid update manifest')
@@ -66,7 +73,14 @@ def bootstrap_ezz():
             continue
         emit('[AMPBO3] Downloading Ezz data: ' + name)
         url = 'https://r2.ezz.lol/boiii/' + urllib.parse.quote(name, safe='/') + '?' + digest
-        with urllib.request.urlopen(url, timeout=60) as response:
+        request = urllib.request.Request(
+            url,
+            headers={
+                'User-Agent': 'Mozilla/5.0 (compatible; AMP-BO3-Adapter/1.0)',
+                'Accept': '*/*',
+            },
+        )
+        with urllib.request.urlopen(request, timeout=60) as response:
             data = response.read(size + 1)
         if len(data) != size or hashlib.sha1(data).hexdigest() != digest:
             raise ValueError('Ezz data size/hash mismatch: ' + name)
