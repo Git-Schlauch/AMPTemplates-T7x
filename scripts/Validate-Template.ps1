@@ -55,3 +55,14 @@ foreach ($setting in $settings) {
     if ($setting.InputType -eq 'enum' -and !$setting.EnumValues.PSObject.Properties[$setting.DefaultValue]) { throw "Invalid enum default: $($setting.FieldName)" }
 }
 Write-Host 'PASS: Zombies mapping covers 19 dvars, 3 rule includes, passwords and map presets.'
+
+if ($keys['App.ExecutableLinux'] -ne '/usr/bin/python3') { throw 'Missing Python adapter executable' }
+if (!(Test-Path (Join-Path $root 'runtime/amp_bo3.py'))) { throw 'Missing runtime adapter' }
+foreach ($backend in @('t7x','ezz')) {
+    $download = @($updates | Where-Object { $_.UpdateSource -eq 'FetchURL' -and $_.UpdateSourceConditionSetting -eq 'ServerBackend' -and $_.UpdateSourceConditionValue -eq $backend })
+    if ($download.Count -ne 1) { throw "Missing conditional download: $backend" }
+}
+$join = [regex]::Match('[AMPBO3] JOIN|abc:0|Chris With Spaces', $keys['Console.UserJoinRegex'])
+if (!$join.Success -or $join.Groups['username'].Value -ne 'Chris With Spaces') { throw 'Player event regex failed' }
+if ([regex]::IsMatch('[GAME] [AMPBO3] JOIN|abc:0|Spoof', $keys['Console.UserJoinRegex'])) { throw 'Game output may spoof bridge events' }
+Write-Host 'PASS: Runtime selection, conditional downloads and AMP player events.'

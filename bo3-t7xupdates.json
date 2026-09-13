@@ -43,7 +43,9 @@
     "UpdateSourceTarget": "{{$FullBaseDir}}UnrankedServer/",
     "OverwriteExistingFiles": true,
     "SkipOnFailure": false,
-    "UpdateSourceArgs": "t7x.exe"
+    "UpdateSourceArgs": "t7x.exe",
+    "UpdateSourceConditionSetting": "ServerBackend",
+    "UpdateSourceConditionValue": "t7x"
   },
   {
     "UpdateStageName": "Initialise Wine Prefix",
@@ -51,6 +53,38 @@
     "UpdateSource": "Executable",
     "UpdateSourceData": "/bin/bash",
     "UpdateSourceArgs": "-ec \"WINEPREFIX=\\\"{{$FullRootDir}}.wine\\\" WINEARCH=win64 WINEDEBUG=-all /usr/bin/wineboot --init\"",
+    "SkipOnFailure": false
+  },
+  {
+    "UpdateStageName": "Download EZZ BOIII",
+    "UpdateSourcePlatform": "Linux",
+    "UpdateSource": "FetchURL",
+    "UpdateSourceData": "https://github.com/Ezz-lol/boiii-free/releases/latest/download/boiii.exe",
+    "UpdateSourceTarget": "{{$FullBaseDir}}UnrankedServer/",
+    "UpdateSourceArgs": "boiii.exe",
+    "OverwriteExistingFiles": true,
+    "SkipOnFailure": false,
+    "UpdateSourceConditionSetting": "ServerBackend",
+    "UpdateSourceConditionValue": "ezz"
+  },
+  {
+    "UpdateStageName": "Install EZZ configuration support files",
+    "UpdateSourcePlatform": "Linux",
+    "UpdateSource": "Executable",
+    "UpdateSourceData": "/bin/bash",
+    "UpdateSourceArgs": "-ec \"mkdir -p \\\"{{$FullBaseDir}}UnrankedServer/boiii\\\"; cp -rn \\\"{{$FullBaseDir}}UnrankedServer/t7x/.\\\" \\\"{{$FullBaseDir}}UnrankedServer/boiii/\\\"\"",
+    "SkipOnFailure": false,
+    "UpdateSourceConditionSetting": "ServerBackend",
+    "UpdateSourceConditionValue": "ezz"
+  },
+  {
+    "UpdateStageName": "Download AMP console and player adapter",
+    "UpdateSourcePlatform": "Linux",
+    "UpdateSource": "FetchURL",
+    "UpdateSourceData": "https://raw.githubusercontent.com/Git-Schlauch/AMPTemplates-T7x/main/runtime/amp_bo3.py",
+    "UpdateSourceTarget": "{{$FullBaseDir}}UnrankedServer/",
+    "UpdateSourceArgs": "amp_bo3.py",
+    "OverwriteExistingFiles": true,
     "SkipOnFailure": false
   }
 ]

@@ -112,12 +112,13 @@
   {
     "DisplayName": "RCON-Passwort",
     "Category": "Zombies - Experten",
-    "Description": "Leer deaktiviert RCON-Zugriff. Wird in der Server-CFG im Klartext gespeichert. Wirkt nur im Modus Zombies - AMP-Einstellungen; danach Spielserver neu starten.",
+    "Description": "Mit der AMP-Konsolenanbindung wird dieses Passwort durch ein automatisch erzeugtes Verwaltungskennwort ueberschrieben. Das Kennwort liegt nur lokal in .amp-rcon-secret. Keine Eingabe erforderlich.",
     "FieldName": "ZmRconPassword",
     "InputType": "password",
     "ParamFieldName": "set rcon_password",
     "DefaultValue": "",
-    "IncludeInCommandLine": false
+    "IncludeInCommandLine": false,
+    "Hidden": true
   },
   {
     "DisplayName": "Private Spielerplaetze",
@@ -302,5 +303,34 @@
       "gametype zclassic map zm_tomb": "Origins",
       "gametype zclassic map zm_zod map zm_factory map zm_castle map zm_island map zm_stalingrad map zm_genesis map zm_prototype map zm_asylum map zm_sumpf map zm_theater map zm_cosmodrome map zm_temple map zm_moon map zm_tomb": "Alle 14 Karten in Reihenfolge"
     }
+  },
+  {
+    "DisplayName": "Server-Software",
+    "Category": "Server und Masterserver",
+    "Description": "T7x behaelt seinen eingebauten Master. Fuer Ezz-Clients EZZ BOIII waehlen, danach Update und Neustart.",
+    "FieldName": "ServerBackend",
+    "ParamFieldName": "ServerBackend",
+    "InputType": "enum",
+    "DefaultValue": "t7x",
+    "EnumValues": {
+      "t7x": "AlterWare T7x",
+      "ezz": "EZZ BOIII"
+    },
+    "IncludeInCommandLine": false
+  },
+  {
+    "DisplayName": "Masterserver (nur EZZ)",
+    "Category": "Server und Masterserver",
+    "Description": "Nur EZZ liest diese Auswahl. Beide registriert bei beiden Listen, garantiert keine Client-Kompatibilitaet. Neustart erforderlich. Nur LAN muss fuer die oeffentliche Liste aus sein.",
+    "FieldName": "MasterPreset",
+    "ParamFieldName": "MasterPreset",
+    "InputType": "enum",
+    "DefaultValue": "ezz",
+    "EnumValues": {
+      "ezz": "Ezz (beide Ezz-Master)",
+      "both": "Ezz + AlterWare (experimentell)",
+      "alterware": "AlterWare (experimentell)"
+    },
+    "IncludeInCommandLine": false
   }
 ]

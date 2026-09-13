@@ -16,6 +16,14 @@ $templatePath = Join-Path $root 'bo3-t7x.kvp'
 $template = Get-Content -Raw $templatePath
 $template = [regex]::Replace($template, '(?m)^Meta.Author=.*$', "Meta.Author=$GitHubUser")
 [IO.File]::WriteAllText($templatePath, $template.Replace("`r`n", "`n"), $utf8)
+$updatesPath = Join-Path $root 'bo3-t7xupdates.json'
+$updates = @(Get-Content -Raw $updatesPath | ConvertFrom-Json)
+foreach ($stage in $updates) {
+    if ($stage.UpdateSourceArgs -eq 'amp_bo3.py') {
+        $stage.UpdateSourceData = "https://raw.githubusercontent.com/$GitHubUser/$Repository/main/runtime/amp_bo3.py"
+    }
+}
+[IO.File]::WriteAllText($updatesPath, (ConvertTo-Json -InputObject $updates -Depth 10) + "`n", $utf8)
 & (Join-Path $PSScriptRoot 'Validate-Template.ps1') -RequirePersonalized
 Write-Host "AMP repository: ${GitHubUser}/${Repository}:main"
 Write-Host 'Files prepared. No commit, upload or remote change was made.'

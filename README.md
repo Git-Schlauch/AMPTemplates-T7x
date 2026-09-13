@@ -4,6 +4,16 @@ Eigenes AMP Generic-Template für einen Black Ops III / T7x Dedicated Server auf
 
 **Status: vorbereitete Erstversion, noch nicht auf einer echten AMP-Instanz getestet.** Die lokalen Prüfungen kontrollieren Dateiformate und interne Verweise, keine AMP-Kompatibilität oder Erreichbarkeit des Servers.
 
+## Version 5: EZZ, Masterserver und AMP-Konsole
+
+Unter **Server und Masterserver** kannst du **T7x / EZZ BOIII** auswaehlen. Bei Ezz gibt es zusaetzlich **Ezz / AlterWare / beide** als Masterserver-Auswahl. Fuer deine Ezz-Freunde zuerst **EZZ BOIII + Ezz** verwenden, danach **Update** und Neustart. Die gemeinsame Registrierung garantiert keine Kompatibilitaet zwischen den Clients.
+
+Ein Python-Adapter stellt das Spielprotokoll in der AMP-Konsole dar, sendet Befehle lokal per RCON und fragt Spieler alle zehn Sekunden ab. Er verwendet ein automatisch erzeugtes RCON-Kennwort. Dafuer wird Python 3 im Container benoetigt. Die acht lokalen Tests ersetzen keinen Test mit dem echten Game-Server.
+
+**[Version 5 in eine bestehende Instanz uebernehmen](docs/upgrade-v5.md)** – inklusive Sicherung, Erhalt deiner Einstellungen und Rueckweg. Nicht die Instanz loeschen. Die aeltere Anleitung zum alleinigen Austausch der Manifeste reicht fuer dieses Upgrade nicht aus.
+
+Die englischen Zombies-Mapdateien wurden auf der Zielinstanz als funktionierend bestaetigt. Deutsche `ge_zm_*`-Dateien ersetzen die vom englischen Server benoetigten `en_zm_*`-Dateien nicht.
+
 ## Zombies-Einstellungen im AMP-Interface (Version 3)
 
 Neuer Modus **Zombies - AMP-Einstellungen** mit Kartenwahl, Servername, Beschreibung, Spielerzahlen, Passwoertern, LAN-Modus, Netzwerk- und Spielregeln. Alle 19 gesetzten Werte und drei Regeldatei-Pfade der bisherigen Zombies-Konfiguration sind enthalten. Die bisherige server_zm.cfg bleibt erhalten; AMP erzeugt eine eigene amp_zombies.cfg. Eigene Werte vor dem Moduswechsel im Interface eintragen. Neustart nach Aenderungen erforderlich.
