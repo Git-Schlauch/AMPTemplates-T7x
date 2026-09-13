@@ -1,5 +1,7 @@
 """AMP process adapter: Wine child, log tail, UDP RCON and player reconciliation."""
 import argparse
+import hashlib
+import json
 import os
 from pathlib import Path
 import queue
@@ -11,6 +13,8 @@ import subprocess
 import sys
 import threading
 import time
+import urllib.parse
+import urllib.request
 
 MASTERS = {
     'ezz': ['master.ezz.lol:20810', 'm.ezz.lol:20810'],
@@ -18,6 +22,59 @@ MASTERS = {
     'both': ['master.ezz.lol:20810', 'm.ezz.lol:20810', 'server.alterware.dev:20810'],
 }
 PRINT = b'\xff\xff\xff\xffprint'
+
+def bootstrap_ezz():
+    """Dedicated startup skips upstream's initial updater; install its data explicitly."""
+    prefix = os.environ.get('WINEPREFIX')
+    if not prefix or not Path(prefix).is_absolute():
+        raise ValueError('Ezz bootstrap requires an absolute WINEPREFIX')
+    base = Path(prefix) / 'drive_c/users/amp/AppData/Local/boiii'
+    required = base / 'data/launcher/main.html'
+    if required.is_file() and required.stat().st_size > 0:
+        return
+    # The AMP wine container runs as amp, matching the path in Ezz's startup error.
+    manifest_url = 'https://r2.ezz.lol/boiii.json'
+    emit('[AMPBO3] Checking Ezz support data...')
+    with urllib.request.urlopen(manifest_url, timeout=45) as response:
+        manifest = json.loads(response.read(4 * 1024 * 1024))
+    if not isinstance(manifest, list) or not manifest:
+        raise ValueError('Ezz returned an empty or invalid update manifest')
+    entries = []
+    for item in manifest:
+        if not isinstance(item, list) or len(item) != 3:
+            raise ValueError('Invalid Ezz manifest entry')
+        name, size, digest = item
+        if name == 'boiii.exe':
+            continue  # AMP updates the server binary separately.
+        if not isinstance(name, str) or '\\' in name or ':' in name:
+            raise ValueError('Invalid Ezz support-data path')
+        relative = Path(name)
+        if relative.is_absolute() or '..' in relative.parts or not relative.parts:
+            raise ValueError('Unsafe Ezz support-data path')
+        target = base / relative
+        if not target.resolve().is_relative_to(base.resolve()):
+            raise ValueError('Ezz support-data path escapes destination')
+        if type(size) is not int or not 0 <= size <= 512 * 1024 * 1024 or not isinstance(digest, str) or not re.fullmatch('[0-9a-fA-F]{40}', digest):
+            raise ValueError('Invalid Ezz support-data size or SHA1')
+        entries.append((name, target, size, digest.lower()))
+    if not any(name == 'data/launcher/main.html' for name, *_ in entries):
+        raise ValueError('Ezz manifest lacks data/launcher/main.html')
+    # Install the startup sentinel last so interrupted downloads are retried.
+    entries.sort(key=lambda entry: entry[0] == 'data/launcher/main.html')
+    for name, target, size, digest in entries:
+        if target.is_file() and target.stat().st_size == size and hashlib.sha1(target.read_bytes()).hexdigest() == digest:
+            continue
+        emit('[AMPBO3] Downloading Ezz data: ' + name)
+        url = 'https://r2.ezz.lol/boiii/' + urllib.parse.quote(name, safe='/') + '?' + digest
+        with urllib.request.urlopen(url, timeout=60) as response:
+            data = response.read(size + 1)
+        if len(data) != size or hashlib.sha1(data).hexdigest() != digest:
+            raise ValueError('Ezz data size/hash mismatch: ' + name)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        temp = target.with_name(target.name + '.amp-download')
+        temp.write_bytes(data)
+        temp.replace(target)
+    emit('[AMPBO3] Ezz support data verified.')
 ROW = re.compile(r'^\s*(\d+)\s+(-?\d+)\s+(\d+|CNCT|ZMBI)\s+([0-9a-fA-F]+|bot\d+)\s+(.+?)\s+((?:\d{1,3}\.){3}\d{1,3}:\d+|loopback|bot)\s+\d+\s*$')
 
 def emit(message):
@@ -150,9 +207,15 @@ def main():
         parser.error('Invalid port or mod folder')
     root = Path.cwd()
     executable = 'boiii.exe' if args.backend == 'ezz' else 't7x.exe'
-    if not (root / executable).is_file() or not (root / 'zone' / args.config).is_file():
-        parser.error('Executable or selected configuration missing. Run AMP Update first.')
+    missing = [path for path in (root / executable, root / 'zone' / args.config)
+               if not path.is_file()]
+    if missing:
+        parser.error('Missing file(s): ' + ', '.join(str(path) for path in missing)
+                     + f'. Working directory: {root}; backend: {args.backend}. '
+                     'Run AMP Update after selecting the backend; check configuration generation.')
     password = configure(root, args.backend, args.masters)
+    if args.backend == 'ezz':
+        bootstrap_ezz()
     tail = LogTail(root / 'identities/dedicatedpc/console_mp.log')
     commands = queue.Queue(maxsize=100)
     stopping = threading.Event()

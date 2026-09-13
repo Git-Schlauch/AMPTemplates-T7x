@@ -9,6 +9,8 @@
 
 ## Konsole und Spieleranzeige
 
+Erststart-Korrektur: Ezzs Dedicated-Start ueberspringt den eigenen Erst-Updater, prueft aber trotzdem `data/launcher/main.html` im Wine-AppData-Ordner. Der Adapter laedt bei fehlender Launcher-Datei die Supportdaten aus dem offiziellen Manifest `https://r2.ezz.lol/boiii.json`. Dateigroesse und SHA1 werden vor dem Speichern geprueft; Pfade duerfen das Zielverzeichnis nicht verlassen. Die EXE wird dabei nicht ersetzt. Der erste Start benoetigt Internet und kann laenger dauern. Nach erfolgreicher Installation wird der Download bei weiteren Starts uebersprungen. Zehn lokale Tests inklusive simuliertem Bootstrap bestehen; der reale CDN-Download muss auf der Zielinstanz geprueft werden.
+
 AMP startet nun einen Python-Adapter, der Wine als Kindprozess betreut. Er liest neue Zeilen aus `identities/dedicatedpc/console_mp.log`; diese erscheinen mit `[GAME]`. Vorhandene alte Logs werden nicht erneut abgespielt. Wine-Ausgaben erscheinen mit `[WINE]`. Direkte Ausgabe und Dateilog koennen dieselbe Meldung enthalten.
 
 Eingaben werden mit Quake-artigem UDP-RCON an **127.0.0.1 und den Game-Port** geschickt. Ein separates zufaelliges Kennwort wird pro Instanz in `.amp-rcon-secret` erzeugt. `zone/amp_control.cfg` setzt es nach der ausgewaehlten Spielkonfiguration. Das bisherige Feld `RCON-Passwort` ist damit nicht mehr massgeblich. Join-Passwoerter bleiben unveraendert. Kennwortdateien werden mit Modus 0600 angelegt und das Kennwort nicht als Prozessargument uebergeben. RCON ist damit am Spielserver aktiviert; die Anbindung sendet Befehle nur lokal. Wer zusaetzliche RCON-Werkzeuge nutzt, muss das neue lokale Kennwort verwenden.
@@ -55,7 +57,7 @@ Rollback: AMP-Instanz stoppen, die gleichnamigen gesicherten Dateien aus dem aus
 1. Nach Start muessen `[AMPBO3] Starting ezz` und neue `[GAME]`-Zeilen erscheinen.
 2. In der Konsole `status` senden: Antwort mit Spielern oder leerer Tabelle erwarten. Bei keiner Antwort das neue Log pruefen; Befehle werden wegen unbekanntem Ausfuehrungszustand nicht automatisch wiederholt.
 3. Mit Ezz verbinden; nach etwa zehn Sekunden den Spieler im AMP-Panel erwarten. Nach Verlassen soll er wieder verschwinden.
-4. Im Ezz-Browser den Server suchen. Bei `both` beide Browser getrennt testen; Master-Annahme und Client-Kompatibilitaet sind nicht lokal testbar.
+4. Im Ezz-Browser den Server suchen. Bei `both` beide B rowser getrennt testen; Master-Annahme und Client-Kompatibilitaet sind nicht lokal testbar.
 5. Stop/Start testen und danach kontrollieren, dass keine zweite Spielserver-Kopie auf demselben Port laeuft.
 
 Lokal getestet sind Parser, Masterdateien, RCON-Paketformat mit simuliertem Socket, Log-Trunkierung, Exitcode und Migration. Ein echter Wine-/AMP-/Ezz-Integrationstest steht noch aus. Der Statusparser richtet sich nach Ezzs Quellcode und muss bei abweichender T7x-Statusausgabe angepasst werden. Keine Namen/Spielerzahlen werden ohne erkannte Antwort erfunden.

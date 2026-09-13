@@ -2,6 +2,9 @@ import importlib.util
 from pathlib import Path
 import tempfile
 import io
+import json
+import hashlib
+import os
 import unittest
 from unittest.mock import patch
 
@@ -73,6 +76,7 @@ class AdapterTests(unittest.TestCase):
                  patch.object(adapter.sys, 'argv', ['amp_bo3.py', '--backend', 'ezz', '--port', '27017', '--config', 'amp_zombies.cfg']), \
                  patch.object(adapter.sys, 'stdin', io.StringIO('')), \
                  patch.object(adapter.signal, 'signal'), \
+                 patch.object(adapter, 'bootstrap_ezz'), \
                  patch.object(adapter.subprocess, 'Popen') as popen:
                 process = popen.return_value
                 process.stdout = io.BytesIO()
@@ -83,6 +87,26 @@ class AdapterTests(unittest.TestCase):
                 self.assertIn('-noupdate', argv)
                 self.assertNotIn('-nosteam', argv)
                 self.assertNotIn((root / '.amp-rcon-secret').read_text().strip(), ' '.join(argv))
+
+    def test_bootstrap_download_and_offline_reuse(self):
+        data = b'<html>test</html>'
+        manifest = [['data/launcher/main.html', len(data), hashlib.sha1(data).hexdigest()]]
+        with tempfile.TemporaryDirectory() as tmp, patch.dict(os.environ, {'WINEPREFIX': tmp}):
+            with patch.object(adapter.urllib.request, 'urlopen', side_effect=[io.BytesIO(json.dumps(manifest).encode()), io.BytesIO(data)]) as fetch:
+                adapter.bootstrap_ezz()
+                self.assertEqual(fetch.call_count, 2)
+            with patch.object(adapter.urllib.request, 'urlopen') as fetch:
+                adapter.bootstrap_ezz()
+                fetch.assert_not_called()
+
+    def test_bootstrap_rejects_traversal_and_bad_hash(self):
+        for manifest in ([['../outside', 1, 'a' * 40]],
+                         [['data/launcher/main.html', 1, 'a' * 40]]):
+            with tempfile.TemporaryDirectory() as tmp, patch.dict(os.environ, {'WINEPREFIX': tmp}), \
+                 patch.object(adapter.urllib.request, 'urlopen', side_effect=[io.BytesIO(json.dumps(manifest).encode()), io.BytesIO(b'x')]):
+                with self.assertRaises(ValueError):
+                    adapter.bootstrap_ezz()
+                self.assertFalse((Path(tmp) / 'drive_c/users/amp/AppData/Local/boiii/data/launcher/main.html').exists())
 
 if __name__ == '__main__':
     unittest.main()
