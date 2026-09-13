@@ -9,6 +9,13 @@
     "SkipOnFailure": false
   },
   {
+    "UpdateStageName": "Create T7x Configuration Download Directory",
+    "UpdateSourcePlatform": "Linux",
+    "UpdateSource": "CreateDirectory",
+    "UpdateSourceArgs": "{{$FullRootDir}}t7x-config",
+    "SkipOnFailure": false
+  },
+  {
     "UpdateStageName": "Download T7x Server Configuration",
     "UpdateSourcePlatform": "Linux",
     "UpdateSource": "FetchURL",

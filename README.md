@@ -67,6 +67,8 @@ Zombies und Campaign sind als Konfigurationsauswahl vorhanden, benötigen aber z
 
 ## Fehler eingrenzen
 
+Version 2 legt `t7x-config/` vor dem ZIP-Download explizit an. Version 1 konnte mit `Could not find a part of the path .../t7x-config/t7x-config.zip` abbrechen. Bei einer bestehenden Version-1-Instanz kann dieser Ordner direkt unter `bo3-t7x/` angelegt und danach **Update** erneut ausgeführt werden; die bereits heruntergeladenen Steam-Dateien bleiben erhalten.
+
 - **Update fehlgeschlagen:** die erste fehlgeschlagene Stufe und deren vollständige Ausgabe prüfen. Installations- und Wine-Fehler werden nicht übersprungen.
 - **Datei nicht gefunden:** tatsächliche SteamCMD-Verzeichnisstruktur mit `server/UnrankedServer/` vergleichen. Dieser Pfad muss auf der Zielinstanz verifiziert werden.
 - **Fehlende Zone:** Konsolenausgabe und gegebenenfalls `server/UnrankedServer/identities/dedicatedpc/console_mp.log` prüfen; benötigte Kartendateien ergänzen.
