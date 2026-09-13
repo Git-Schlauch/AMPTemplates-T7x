@@ -1,0 +1,17 @@
+# Runtime data and private configuration
+bo3-t7x/
+.wine/
+server/
+UnrankedServer/
+*.exe
+*.dll
+*.ff
+*.fd
+*.xpak
+*.log
+*.zip
+.env
+.env.*
+*.local.cfg
+.DS_Store
+Thumbs.db

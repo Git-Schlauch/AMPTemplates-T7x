@@ -1,0 +1,27 @@
+[
+  {
+    "DisplayName": "Server Mode",
+    "Category": "T7x Server",
+    "Description": "Select which T7x configuration file should be loaded.",
+    "FieldName": "ServerConfig",
+    "InputType": "enum",
+    "ParamFieldName": "ServerConfig",
+    "DefaultValue": "server.cfg",
+    "EnumValues": {
+      "server.cfg": "Multiplayer",
+      "server_zm.cfg": "Zombies",
+      "server_cp.cfg": "Campaign / Coop"
+    }
+  },
+  {
+    "DisplayName": "Mod / fs_game",
+    "Category": "T7x Server",
+    "Description": "Optional mod folder or Workshop ID. Leave empty for normal play.",
+    "FieldName": "ModFolder",
+    "InputType": "text",
+    "ParamFieldName": "ModFolder",
+    "DefaultValue": "",
+    "Placeholder": "",
+    "EnumValues": {}
+  }
+]

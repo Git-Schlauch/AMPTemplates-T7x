@@ -1,0 +1,49 @@
+[
+  {
+    "UpdateStageName": "Download Black Ops III Dedicated Server",
+    "UpdateSourcePlatform": "Linux",
+    "UpdateSource": "SteamCMD",
+    "UpdateSourceData": "545990",
+    "UpdateSourceTarget": "{{$FullBaseDir}}",
+    "ForceDownloadPlatform": "Windows",
+    "SkipOnFailure": false
+  },
+  {
+    "UpdateStageName": "Download T7x Server Configuration",
+    "UpdateSourcePlatform": "Linux",
+    "UpdateSource": "FetchURL",
+    "UpdateSourceData": "https://github.com/Dss0/t7-server-config/archive/refs/heads/main.zip",
+    "UpdateSourceTarget": "{{$FullRootDir}}t7x-config",
+    "UnzipUpdateSource": true,
+    "OverwriteExistingFiles": true,
+    "DeleteAfterExtract": true,
+    "SkipOnFailure": false,
+    "UpdateSourceArgs": "t7x-config.zip"
+  },
+  {
+    "UpdateStageName": "Install T7x Server Configuration",
+    "UpdateSourcePlatform": "Linux",
+    "UpdateSource": "Executable",
+    "UpdateSourceData": "/bin/bash",
+    "UpdateSourceArgs": "-ec \"test -d \\\"{{$FullRootDir}}t7x-config/t7-server-config-main/t7x\\\"; test -d \\\"{{$FullRootDir}}t7x-config/t7-server-config-main/zone\\\"; mkdir -p \\\"{{$FullBaseDir}}UnrankedServer\\\"; cp -rn \\\"{{$FullRootDir}}t7x-config/t7-server-config-main/t7x\\\" \\\"{{$FullBaseDir}}UnrankedServer/\\\"; cp -rn \\\"{{$FullRootDir}}t7x-config/t7-server-config-main/zone\\\" \\\"{{$FullBaseDir}}UnrankedServer/\\\"\"",
+    "SkipOnFailure": false
+  },
+  {
+    "UpdateStageName": "Download AlterWare T7x",
+    "UpdateSourcePlatform": "Linux",
+    "UpdateSource": "FetchURL",
+    "UpdateSourceData": "https://master.bo3.eu/t7x/t7x.exe",
+    "UpdateSourceTarget": "{{$FullBaseDir}}UnrankedServer/",
+    "OverwriteExistingFiles": true,
+    "SkipOnFailure": false,
+    "UpdateSourceArgs": "t7x.exe"
+  },
+  {
+    "UpdateStageName": "Initialise Wine Prefix",
+    "UpdateSourcePlatform": "Linux",
+    "UpdateSource": "Executable",
+    "UpdateSourceData": "/bin/bash",
+    "UpdateSourceArgs": "-ec \"WINEPREFIX=\\\"{{$FullRootDir}}.wine\\\" WINEARCH=win64 WINEDEBUG=-all /usr/bin/wineboot --init\"",
+    "SkipOnFailure": false
+  }
+]

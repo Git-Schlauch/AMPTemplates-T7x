@@ -1,0 +1,9 @@
+[
+  {
+    "Protocol": "Both",
+    "Port": 27017,
+    "Ref": "ServerPort",
+    "Name": "Game Port",
+    "Description": "Black Ops III / T7x game and server port"
+  }
+]
