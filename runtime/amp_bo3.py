@@ -251,7 +251,10 @@ def main():
     threading.Thread(target=stdin_reader, daemon=True).start()
     argv = ['/usr/bin/wine', executable, '-dedicated', '-headless']
     if args.backend == 'ezz':
-        argv += ['-noupdate']
+        # Ezz enables server-side sound processing by default for Zombies.
+        # Official maps can run without the large XPAK sound payload when this
+        # upstream-supported flag is present.
+        argv += ['-noupdate', '-nosnd']
     argv += ['+set', 'fs_game', args.mod, '+set', 'net_port', str(args.port),
              '+set', 'logfile', '2', '+exec', args.config, '+exec', 'amp_control.cfg']
     emit(f'[AMPBO3] Starting {args.backend}; master selection: {args.masters if args.backend == "ezz" else "T7x built-in"}')

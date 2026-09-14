@@ -85,6 +85,7 @@ class AdapterTests(unittest.TestCase):
                 self.assertEqual(adapter.main(), 7)
                 argv = popen.call_args.args[0]
                 self.assertIn('-noupdate', argv)
+                self.assertIn('-nosnd', argv)
                 self.assertNotIn('-nosteam', argv)
                 self.assertNotIn((root / '.amp-rcon-secret').read_text().strip(), ' '.join(argv))
 
